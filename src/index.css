@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -52,6 +54,13 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+  transition: background 0.4s;
+}
+
+.dark body {
+  background: linear-gradient(135deg, #18181b 0%, #23272f 100%);
 }
 
 h1 {
@@ -59,4 +68,3 @@ h1 {
   line-height: 2.5rem;
   font-weight: 600;
 }
-
