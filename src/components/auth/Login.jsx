@@ -8,7 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -30,6 +30,19 @@ export default function Login() {
       } else {
         setError(`Authentication error: ${errorCode} ${errorMessage}`);
       }
+    }
+    setLoading(false);
+  }
+
+  async function handleGoogleSignIn(e) {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      await signInWithGoogle();
+      navigate('/dashboard');
+    } catch (error) {
+      setError('Google sign-in failed');
     }
     setLoading(false);
   }
@@ -93,6 +106,15 @@ export default function Login() {
                 Logging in...
               </span>
             ) : 'Login'}
+          </button>
+          <button
+            type="button"
+            onClick={handleGoogleSignIn}
+            disabled={loading}
+            className="w-full flex justify-center items-center py-3 px-4 rounded-xl text-base font-semibold bg-white border border-border dark:bg-neutral-800 dark:border-neutral-700 text-foreground dark:text-white hover:bg-gray-100 dark:hover:bg-neutral-700 transition-all duration-200 mt-2"
+          >
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-5 w-5 mr-2" />
+            Sign in with Google
           </button>
           <div className="text-sm text-center">
             <Link
