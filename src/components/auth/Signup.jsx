@@ -24,8 +24,22 @@ export default function Signup() {
       setLoading(true);
       await signup(email, password);
       navigate('/dashboard');
-    } catch (err) {
-      setError('Failed to create an account');
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      if (errorCode === 'auth/email-already-in-use') {
+        // Handle email already in use error
+        setError('Email already in use');
+      } else if (errorCode === 'auth/invalid-email') {
+        // Handle invalid email error
+        setError('Invalid email');
+      } else if (errorCode === 'auth/weak-password') {
+        // Handle weak password error
+        setError('Weak password');
+      } else {
+        // Handle other errors
+        setError('Sign-up error:', errorMessage);
+      }
     }
     setLoading(false);
   }
@@ -105,7 +119,15 @@ export default function Signup() {
               disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Sign up
+              {loading ? (
+                <span className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Signing up...
+                </span>
+              ) : 'Signup'}
             </button>
           </div>
 
